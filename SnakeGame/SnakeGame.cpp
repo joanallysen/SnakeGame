@@ -5,12 +5,14 @@
 
 using namespace std;
 
-
+// NOT RESET
 int width = 70;
 int height = 24;
 int speed = 40;
 bool dieUponHittingWall = false;
 bool continuousGrow = false;
+
+// RESET
 int score = 0;
 
 vector<vector<char>> panel{};
@@ -32,8 +34,6 @@ Dir playerDir = LEFT;
 Dir playerDir2 = DOWN;
 
 Winner isWinner{};
-
-
 
 
 void drawPanel() {
@@ -366,6 +366,7 @@ void update() {
 }
 
 void singlePlayerSetup() {
+    playerDir = LEFT;
     playerPos = { {width / 2, height / 2} };
     update();
 }
@@ -390,17 +391,30 @@ void multiPlayerSetup() {
 
 void mainMenu();
 
-void checkInput() {
-    if (cin.fail()) {
+int askInput(int numOfCase = INT_MAX) {
+    int userInput{};
+
+    cin >> userInput;
+    
+    while (cin.fail() || userInput > numOfCase || userInput < 1) {
         cin.clear();
-        cin.ignore();
-        cout << "That's not a number! redirecting to main menu" << endl;
-        Sleep(200);
-        mainMenu();
+        cin.ignore(1000, '\n');
+        cout << "That's not part of the option!, please Input the number" << endl;
+        cout << "Option: ";
+        cin >> userInput;
     }
+    
+    return userInput;
 }
+
+
 void reset() {
+    score = 0;
     isGameOver = false;
+    isMultiplayer = false;
+    panel = {};
+    prevPlayerPos = {};
+    prevPlayerPos2 = {};
     playerPos = {};
     playerPos2 = {};
     isWinner = {};
@@ -410,19 +424,13 @@ void askPlayAgain() {
     cout << "Do you want to play again?" << endl;
     cout << "1. Yes\n2. No \nYour Option: ";
 
-    int userInput{};
-    cin >> userInput;
-
-    checkInput();
+    int userInput = askInput(2);
     if (userInput == 1) {
         reset();
         mainMenu();
     }
     else if (userInput == 2) {
         return;
-    }
-    else {
-        cout << "Please pick 1 of the option" << endl;
     }
 }
 
@@ -440,28 +448,29 @@ void settingsSetup() {
     cout << "What do you want to change? " << endl;
     cout << "Option: ";
 
-    int userInput{};
-    cin >> userInput;
+    int userInput = askInput(5);
+
     switch (userInput) {
         case 1:
-            cout << "Please input new width and height!\n *please input valid number!, word cannot be accepeted thank you!" << endl;
+            cout << "Please input new width and height!\n*please input a valid number!, word cannot be accepted" << endl;
+            cout << "*width higher then 70 may lead to screen issues\nHeight: ";
             cout << "Width: ";
-            cin >> width;
-            cout << "Height: ";
-            cin >> height;
+            width = askInput();
+            cout << "*height higher then 24 may lead to screen issues\nHeight: ";
+            height = askInput();
             settingsSetup();
             break;
         case 2:
             cout << "Please input new speed!" << endl;
             cout << "Speed: ";
-            cin >> speed;
+            speed = askInput();
             settingsSetup();
             break;
         case 3:
             cout << "Do you want to die upon hitting wall?" << endl;
             cout << "1. Yes\n2. No" << endl;
             cout << "Option: ";
-            cin >> userInput;
+            userInput = askInput(2);
             if (userInput == 1) {
                 dieUponHittingWall = true;
             }
@@ -475,7 +484,7 @@ void settingsSetup() {
             cout << "Do you want the tail to grow continuously?" << endl;
             cout << "1. Yes\n2. No" << endl;
             cout << "Option: ";
-            cin >> userInput;
+            userInput == askInput(2);
             if (userInput == 1) {
                 continuousGrow = true;
             }
@@ -510,10 +519,14 @@ void mainMenu() {
     cout << "Welcome to the old-school snake game!" << endl;
     cout << "You can play either singleplayer or multiplayer!, please select!" << endl;
     cout << "1. Singleplayer\n2. Multiplayer (test mode)\n3. Additional Settings \nYour Option: ";
-    int userInput;
-    cin >> userInput;
+    
+
+    int userInput = askInput(3);
+
     cout << "Thank you for selecting! redirecting.." << endl;
     Sleep(200);
+    system("cls");
+
     if (userInput == 1) {
         singlePlayerSetup();
     }
@@ -522,6 +535,10 @@ void mainMenu() {
     }
     else if (userInput == 3) {
         settingsSetup();
+    }
+    else {
+        mainMenu();
+        return;
     }
     askPlayAgain();
 }
