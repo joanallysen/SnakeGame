@@ -22,7 +22,6 @@ pair<int, int> prevPlayerPos{};
 pair<int, int> prevPlayerPos2{};
 
 pair<int, int> fruitPos{10, 12};
-int tailCount = 0;
 
 bool isGameOver = false;
 bool isMultiplayer = false;
@@ -163,11 +162,10 @@ void generateRandomFruit() {
 void addTail(int playerNumber) {
     if (playerNumber == 1) {
         playerPos.push_back(prevPlayerPos);
-        tailCount++;
+        
     }
     else if (playerNumber == 2) {
         playerPos2.push_back(prevPlayerPos2);
-        tailCount++;
     }
 }
 
@@ -199,7 +197,7 @@ void checkCollision() {
         }
     }
 
-    // check if player 1 hit wall
+    // check if player 1 hit wall and send to opposite
     if (playerPos[0].second == height) {
         pair<int, int> newMove = { playerPos[0].first, 0}; playerPos.insert(playerPos.begin(), newMove); playerPos.pop_back();
     }
@@ -340,6 +338,7 @@ void updatePlayerPosition() {
 }
 
 void update() {
+    int tempTime = 0;
     while (!isGameOver)
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 0,0 });
@@ -347,10 +346,22 @@ void update() {
         playerControl();
         updatePlayerPosition();
         checkCollision();
+
         cout << "Current Score : " << score << endl;
+
         Sleep(40);
         
-        cout << "fruit pos: " << "{" << fruitPos.first << ", " << fruitPos.second << "} " << endl;
+        if (!continuousGrow)
+            continue;
+
+        if (tempTime % 50 == 0) {
+            addTail(1);
+            if (isMultiplayer) {
+                addTail(2);
+            }
+        }
+
+        tempTime++;
     }
 }
 
@@ -364,12 +375,16 @@ void multiPlayerSetup() {
     playerDir = DOWN;
     playerPos = { {width / 2 + 2 , height / 2} };
     playerPos2 = { {width / 2 - 2, height / 2} };
+
     update();
-    if (isWinner == PLAYER1) {
-        cout << "PLAYER 1 WINS" << endl;
-    }
-    else if (isWinner == PLAYER2) {
-        cout << "PLAYER 2 WINS" << endl;
+
+    if (isGameOver) {
+        if (isWinner == PLAYER1) {
+            cout << "PLAYER 1 WINS" << endl;
+        }
+        else if (isWinner == PLAYER2) {
+            cout << "PLAYER 2 WINS" << endl;
+        }
     }
 }
 
@@ -420,7 +435,7 @@ void settingsSetup() {
     cout << "2. Snake speed: " << speed << endl;
     cout << "3. Death upon hitting a wall : " << boolalpha << dieUponHittingWall << endl;
     cout << "4. (MULTIPLAYER) Tail will grow every few seconds: " << boolalpha << continuousGrow << endl;
-    cout << "4. Return to main menu" << endl;
+    cout << "5. Return to main menu" << endl;
     cout << "----------------------------------------" << endl;
     cout << "What do you want to change? " << endl;
     cout << "Option: ";
@@ -457,9 +472,27 @@ void settingsSetup() {
             settingsSetup();
             break;
         case 4:
+            cout << "Do you want the tail to grow continuously?" << endl;
+            cout << "1. Yes\n2. No" << endl;
+            cout << "Option: ";
+            cin >> userInput;
+            if (userInput == 1) {
+                continuousGrow = true;
+            }
+            else if (userInput == 2) {
+                continuousGrow = false;
+            }
+
+            settingsSetup();
+        case 5:
             cout << "Redirecting..." << endl;
             Sleep(200);
             mainMenu();
+            break;
+        default:
+            cout << "That is not one of the option, please try again!" << endl;
+            Sleep(200);
+            settingsSetup();
     }
 }
 
