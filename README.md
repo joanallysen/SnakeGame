@@ -1,4 +1,4 @@
-***************MAIN***************
+# MAIN
 
 Hello 
 
@@ -8,12 +8,12 @@ https://www.geeksforgeeks.org/snake-code-cpp/
 I have changed the logic mainly the variable from int to a vector.
 
 
-***************MULTIPLAYER NOTICE***************
+# MULTIPLAYER SETTINGS
 
 Controls for the second player is I J K L, similar to W A S D
 
 
-***************ISSUES***************
+# ISSUES
 
 Arrow key control is temporrily changed to I J K L control because of delay.
 
