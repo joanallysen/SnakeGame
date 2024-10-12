@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// NOT RESET
+// DON'T RESET
 int width = 70;
 int height = 24;
 int speed = 40;
@@ -349,7 +349,7 @@ void update() {
 
         cout << "Current Score : " << score << endl;
 
-        Sleep(40);
+        Sleep(100 - speed);
         
         if (!continuousGrow)
             continue;
@@ -367,12 +367,14 @@ void update() {
 
 void singlePlayerSetup() {
     playerDir = LEFT;
+    
     playerPos = { {width / 2, height / 2} };
     update();
 }
 
 void multiPlayerSetup() {
     isMultiplayer = true;
+    
     playerDir = DOWN;
     playerPos = { {width / 2 + 2 , height / 2} };
     playerPos2 = { {width / 2 - 2, height / 2} };
@@ -406,7 +408,6 @@ int askInput(int numOfCase = INT_MAX) {
     
     return userInput;
 }
-
 
 void reset() {
     score = 0;
@@ -452,7 +453,7 @@ void settingsSetup() {
 
     switch (userInput) {
         case 1:
-            cout << "Please input new width and height!\n*please input a valid number!, word cannot be accepted" << endl;
+            cout << "Please input new width and height!" << endl;
             cout << "*width higher then 70 may lead to screen issues\nHeight: ";
             cout << "Width: ";
             width = askInput();
@@ -462,8 +463,8 @@ void settingsSetup() {
             break;
         case 2:
             cout << "Please input new speed!" << endl;
-            cout << "Speed: ";
-            speed = askInput();
+            cout << "*maximum speed is 100\nSpeed: ";
+            speed = askInput(100);
             settingsSetup();
             break;
         case 3:
@@ -471,6 +472,7 @@ void settingsSetup() {
             cout << "1. Yes\n2. No" << endl;
             cout << "Option: ";
             userInput = askInput(2);
+
             if (userInput == 1) {
                 dieUponHittingWall = true;
             }
@@ -484,25 +486,24 @@ void settingsSetup() {
             cout << "Do you want the tail to grow continuously?" << endl;
             cout << "1. Yes\n2. No" << endl;
             cout << "Option: ";
-            userInput == askInput(2);
+            
+            userInput = askInput(2);
             if (userInput == 1) {
                 continuousGrow = true;
             }
             else if (userInput == 2) {
                 continuousGrow = false;
-            }
+            } 
 
             settingsSetup();
+            break;
         case 5:
             cout << "Redirecting..." << endl;
             Sleep(200);
-            mainMenu();
+            return;
             break;
-        default:
-            cout << "That is not one of the option, please try again!" << endl;
-            Sleep(200);
-            settingsSetup();
     }
+    return;
 }
 
 void mainMenu() {
@@ -535,8 +536,6 @@ void mainMenu() {
     }
     else if (userInput == 3) {
         settingsSetup();
-    }
-    else {
         mainMenu();
         return;
     }
