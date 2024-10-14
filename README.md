@@ -7,7 +7,8 @@
 Hello 
 
 This is a remake of the snake game using c++ in the console with multiplayer functionality
-*Note* The control for player 1 is WASD, player 2 is IJKL
+
+**Note** The control for player 1 is WASD, player 2 is IJKL
 
 I have modified the logic mainly the datatype from int to a vector.
 
