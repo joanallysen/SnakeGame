@@ -89,7 +89,18 @@ Unfortunately due to current input delay, the original input for player 2 using 
 
 ## Screenshots
 
-![Game Screenshot](link-to-your-screenshot.png)
+### Main Menu
+<img src="https://github.com/user-attachments/assets/2004a78c-cda8-4592-b752-b44f10117b92" width ="50%">
+
+### Singleplayer
+<img src="https://github.com/user-attachments/assets/d2ad4c7d-6d7c-4611-a496-473c9b33533d" width ="50%">
+
+### Multiplayer
+<img src="https://github.com/user-attachments/assets/e9be5c31-3b34-4d1f-af06-8fb74ba2adcb" width ="50%">
+
+### Customization / Settings
+<img src="https://github.com/user-attachments/assets/121408f1-96cd-425d-a737-57bd6d756219" width ="50%">
+
 
 ---
 
